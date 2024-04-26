@@ -1,0 +1,17 @@
+{
+  "name": "web-crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "crawl.js",
+  "type": "module",
+  "scripts": {
+    "start": "node crawl.js"
+  },
+  "author": "Maor Caspi",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "node-fetch": "^3.3.2",
+    "url": "^0.11.3"
+  }
+}
