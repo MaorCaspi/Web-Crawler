@@ -1,8 +1,10 @@
+const Url = require('../models/url_model');
 const {crawler} = require('../crawler');
 
 const getUrls = async (req, res) => {
     try {
-        res.status(200).send('hello!');
+        const urls = await Url.find();
+        res.status(200).send(urls);
     }
     catch (err) {
         res.status(400).send({
@@ -14,7 +16,7 @@ const getUrls = async (req, res) => {
 
 const processUrl = async (req, res) => {
     try {
-        url = req.body.url;
+        const url = req.body.url;
         crawler.queue(url);
         res.status(200).send('URL processing triggered successfully for the URL: ' + url);
     }

@@ -1,23 +1,35 @@
 const dotenv = require('dotenv').config();
 const Crawler = require('crawler');
+const Url = require('./models/url_model');
 
 const crawler = new Crawler({
   maxConnections: process.env.MAX_CRAWLER_CONECTIONS,
   // This will be called for each crawled page
-  callback: (error, res, done) => {
+  callback: async (error, res, done) => {
       if (error) {
           console.log(error);
       } else {
           const $ = res.$;
-          const url = res.options.uri;
-          const title = $('title').text();
-          const html = $('html').text();
+          const url = res.options.uri.toLowerCase();
+          const html = $('html');
+          
+          // Save the crawled URL to the database
+          try {
+                await Url.create({
+                    url: url,
+                    htmlContent: html
+                });
+            console.log(`URL ${url} saved to the database.`);
+
+            }
+            catch (err) {
+                console.error(`Error saving URL ${url} to the database: ${err.message}`);
+            }
 
           const links = $("a")
           .map((i, link) => link.attribs.href)
           .get()
           .filter(link => link.startsWith("http"));
-          console.log(links);
 
           crawler.queue(links);
 
