@@ -10,5 +10,5 @@ POST http://localhost:3000/
 Content-Type: application/json
 
 {
-    "url" : "https://fibi.net.hilan.co.il/login"
+    "url" : "https://www.google.co.il"
 }
