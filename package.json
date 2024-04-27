@@ -1,17 +1,22 @@
 {
-  "name": "web-crawler",
-  "version": "1.0.0",
-  "description": "",
-  "main": "crawl.js",
-  "type": "module",
-  "scripts": {
-    "start": "node crawl.js"
-  },
-  "author": "Maor Caspi",
-  "license": "ISC",
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.12",
-    "node-fetch": "^3.3.2",
-    "url": "^0.11.3"
-  }
+    "name": "web-crawler",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "type": "commonjs",
+    "scripts": {
+        "start": "nodemon app.js"
+    },
+    "author": "Maor Caspi",
+    "license": "ISC",
+    "dependencies": {
+        "cheerio": "^1.0.0-rc.12",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "node-fetch": "^2.7.0",
+        "url": "^0.11.3"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.0"
+    }
 }

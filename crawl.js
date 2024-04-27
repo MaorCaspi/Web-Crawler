@@ -1,6 +1,6 @@
-import fetch from "node-fetch";
-import cheerio from "cheerio";
-import urlParser from "url";
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
+const urlParser = require('url');
 
 const seenUrls = {};
 
