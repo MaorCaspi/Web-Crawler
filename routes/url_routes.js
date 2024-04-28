@@ -36,23 +36,30 @@ const Url = require('../controllers/urls');
 */
 
 /**
-* @swagger
-* /:
-*   get:
-*     summary: Retrieve stored URLs and their associated raw HTML content
-*     tags: [Url Api]
-*     responses:
-*       200:
-*         description: Success
-*         content:
-*           application/json:
-*             schema:
-*               type: array
-*               items:
-*                 $ref: '#/components/schemas/Url'
-*       400:
-*         description: An error has occurred
-*/
+ * @swagger
+ * /:
+ *   get:
+ *     summary: Retrieve stored URLs list
+ *     tags: [Url Api]
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   url:
+ *                     type: string
+ *             example:
+ *               - url: 'https://www.google.co.il'
+ *               - url: 'https://www.youtube.com'
+ *               - url: 'https://mail.google.com'
+ *       400:
+ *         description: An error has occurred
+ */
 router.get('/', Url.getUrls);
 
 /**

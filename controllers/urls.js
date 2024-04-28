@@ -3,7 +3,7 @@ const {crawler} = require('../crawler');
 
 const getUrls = async (req, res) => {
     try {
-        const urls = await Url.find();
+        const urls = await Url.find( {}, {"_id":0, "__v":0, "htmlContent":0});
         res.status(200).send(urls);
     }
     catch (err) {
