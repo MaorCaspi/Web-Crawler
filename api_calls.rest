@@ -6,6 +6,11 @@ GET http://localhost:3000/
 ###
 
 
+GET http://localhost:3000/getHtmlByUrl?url=https://www.google.co.il
+
+###
+
+
 POST http://localhost:3000/
 Content-Type: application/json
 

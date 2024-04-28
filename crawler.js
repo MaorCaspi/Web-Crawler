@@ -13,7 +13,7 @@ const crawler = new Crawler({
           const $ = res.$;
           const url = res.options.uri.toLowerCase();
          try {
-            const exists = await Url.findOne({'url' : url});
+            const exists = await Url.findOne({'url' : url}, {"_id":0, "__v":0, "htmlContent":0});
             if (exists == null) {
                 const html = $('html');
                 // Save the crawled URL to the database
