@@ -4,6 +4,7 @@ const Url = require('./models/url_model');
 
 const crawler = new Crawler({
   maxConnections: process.env.MAX_CRAWLER_CONECTIONS,
+  skipDuplicates: true, //skips URIs that were already crawled, without even calling callback()
   // This will be called for each crawled page
   callback: async (error, res, done) => {
       if (error) {
