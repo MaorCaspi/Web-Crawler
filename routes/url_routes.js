@@ -85,7 +85,7 @@ router.get('/', Url.getUrls);
 *             schema:
 *               $ref: '#/components/schemas/Url'
 *       204:
-*         description: URL query parameter is empty
+*         description: URL query parameter not found
 *       404:
 *         description: There is no such URL at the DB
 *       400:
@@ -114,6 +114,8 @@ router.get('/getHtmlByUrl', Url.getDataByUrl)
 *     responses:
 *       200:
 *         description: URL processing triggered successfully
+*       204:
+*         description: URL body parameter not found
 *       400:
 *         description: An error has occurred
 */

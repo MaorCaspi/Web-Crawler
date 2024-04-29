@@ -1,16 +1,17 @@
 const Url = require('../models/url_model');
 const {crawler} = require('../crawler');
+const axios = require('axios');
 
 // Retrieve stored URLs list
 const getUrls = async (req, res) => {
     try {
-        const urls = await Url.find( {}, {"_id":0, "__v":0, "htmlContent":0});
+        const urls = await Url.find( {}, {"_id":0, "__v":0, "htmlContent":0}); // Get all URLs
         if(urls.length === 0){
             res.status(204).send("There are no URLs in the database");
+            return;
         }
-        else{
-            res.status(200).send(urls);
-        }
+
+        res.status(200).send(urls); // Sucsses
     }
     catch (err) {
         res.status(400).send({
@@ -24,17 +25,17 @@ const getUrls = async (req, res) => {
 const getDataByUrl = async (req, res) => {
     try {
         const url = req.query.url;
-        if(url == null){
-            res.status(204).send(); //No Content, URL query parameter is empty
+        if(url == null) { //No Content, URL query parameter not found
+            res.status(204).send();
         }
         else {
             result = await Url.findOne( {"url" : url}, {"__v":0});
             if(!result){
                 res.status(404).send("No such URL found");
+                return;
             }
-            else{
-                res.status(200).send(result);
-            }
+
+            res.status(200).send(result); // Sucsses
         }
     } catch (err) {
         res.status(400).send({
@@ -48,7 +49,27 @@ const getDataByUrl = async (req, res) => {
 const processUrl = async (req, res) => {
     try {
         const url = req.body.url;
-        crawler.queue(url);
+        if(url == null) { //No Content, URL body parameter not found
+            res.status(204).send();
+            return;
+        }
+
+        // Check if the URL is reachable by making an HTTP request
+        try {
+            const response = await axios.head(url);
+            if (response.status !== 200) {
+                res.status(400).send(`Failed to reach URL: ${url} , the response status was ${response.status}`);
+                return;
+            }
+        }
+        catch{
+            res.status(400).send(`Failed to reach URL: ${url} , it's unavailable`);
+            return;
+        }
+
+
+        // Sucsses
+        crawler.queue(url); //Queue the URL for crawling
         res.status(200).send('URL processing triggered successfully for the URL: ' + url);
     }
     catch (err) {

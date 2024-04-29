@@ -12,6 +12,26 @@ describe('Testing accept incoming URL',()=>{
     });
 });
 
+describe('Testing accept incoming URL with missing url',()=>{
+
+    test('Test recive url with missing url', async ()=>{
+        const response = await request(app).post('/').send({
+        });
+        expect(response.statusCode).toEqual(204);
+    });
+});
+
+describe('Testing accept incoming URL with site not exist',()=>{
+    const url = 'https://www.noWebsiteExample.co.il';
+
+    test('Test recive url with site not exist', async ()=>{
+        const response = await request(app).post('/').send({
+            'url' : url
+        });
+        expect(response.statusCode).toEqual(400);
+    });
+});
+
 describe('Testing retrieve stored URLs list',()=>{
 
     test('Test retrieve stored URLs list', async ()=>{

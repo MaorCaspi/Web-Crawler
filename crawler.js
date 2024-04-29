@@ -4,20 +4,20 @@ const Url = require('./models/url_model');
 
 const crawler = new Crawler({
   maxConnections: process.env.MAX_CRAWLER_CONECTIONS,
-  skipDuplicates: true, //skips URIs that were already crawled, without even calling callback()
-  // This will be called for each crawled page
-  callback: async (error, res, done) => {
+  skipDuplicates: true, // Skips URIs that were already crawled, without even calling callback()
+  
+  callback: async (error, res, done) => { // This will be called for each crawled page
       if (error) {
-          console.log(error);
+          console.error(error);
       } else {
           const $ = res.$;
           const url = res.options.uri.toLowerCase();
-         try {
+         try { // Check if it the URL address is already at the database
             const exists = await Url.findOne({'url' : url}, {"_id":0, "__v":0, "htmlContent":0});
-            if (exists == null) {
+            if (exists == null) { // if not already exist at the database
                 const html = $('html');
-                // Save the crawled URL to the database
-                try {
+
+                try { // Save the crawled URL to the database
                     await Url.create({
                         url: url,
                         htmlContent: html
@@ -29,20 +29,19 @@ const crawler = new Crawler({
                 }
             }
             else {
-                console.log(`URL ${url} is already in the database.`);
+                console.log(`URL ${url} was already at the database.`);
             }
         }
         catch (err) {
             console.error(`Error with check if the URL ${url} is in the database: ${err.message}`);
         }
-        
+        // Get all links that found at the html page
         const links = $("a")
         .map((i, link) => link.attribs.href)
         .get()
         .filter(link => link.startsWith("http"));
 
-        crawler.queue(links);
-
+        crawler.queue(links); // Enter all the links that found into the queue's crawler
       }
       done();
   }

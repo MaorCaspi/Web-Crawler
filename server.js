@@ -18,7 +18,7 @@ if (process.env.NODE_ENV == "development") {
                 version: "1.0.0",
                 description: "System that collects unique URLs and their corresponding HTML content.",
             },
-            servers: [{url: "http://localhost:" + process.env.PORT,},],
+            servers: [{url: process.env.SERVER_URL + ":" + process.env.PORT,},],
         },
         apis: ["./routes/*.js"],
     };
