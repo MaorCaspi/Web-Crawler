@@ -1,6 +1,5 @@
 const dotenv = require('dotenv').config();
 const Crawler = require('crawler');
-const Url = require('./models/url_model');
 
 const crawler = new Crawler({
   maxConnections: process.env.MAX_CRAWLER_CONECTIONS,
@@ -12,28 +11,23 @@ const crawler = new Crawler({
       } else {
           const $ = res.$;
           const url = res.options.uri.toLowerCase();
-         try { // Check if it the URL address is already at the database
-            const exists = await Url.findOne({'url' : url}, {"_id":0, "__v":0, "htmlContent":0});
-            if (exists == null) { // if not already exist at the database
-                const html = $('html');
 
-                try { // Save the crawled URL to the database
-                    await Url.create({
-                        url: url,
-                        htmlContent: html
-                    });
-                    console.log(`URL ${url} saved to the database.`);
-                }
-                catch (err) {
-                    console.error(`Error saving URL ${url} to the database: ${err.message}`);
-                }
+          const UrlController = require('./controllers/urls');
+
+          try { 
+            // Check if it the URL address is already at the database
+            const exists = await UrlController.searchUrlInDB(url);
+
+            if (!exists) {
+                const html = $('html');
+                await UrlController.createNewUrlInDB(url, html);
             }
             else {
-                console.log(`URL ${url} was already at the database.`);
+                console.log(`URL ${url} was already in the database.`);
             }
         }
         catch (err) {
-            console.error(`Error with check if the URL ${url} is in the database: ${err.message}`);
+            console.error(`Error processing URL ${url}: ${err.message}`);
         }
         // Get all links that found at the html page
         const links = $("a")

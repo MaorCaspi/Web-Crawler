@@ -2,6 +2,28 @@ const Url = require('../models/url_model');
 const {crawler} = require('../crawler');
 const axios = require('axios');
 
+async function searchUrlInDB(url) {
+    try {
+        return await Url.findOne({ 'url': url }, { "_id": 0, "__v": 0, "htmlContent": 0 });
+    } catch (err) {
+        console.error(`Error searching for URL ${url} in the database: ${err.message}`);
+        throw err;
+    }
+}
+
+async function createNewUrlInDB(url, html) {
+    try {
+        await Url.create({
+            url: url,
+            htmlContent: html
+        });
+        console.log(`URL ${url} saved to the database.`);
+    } catch (err) {
+        console.error(`Error saving URL ${url} to the database: ${err.message}`);
+        throw err;
+    }
+}
+
 // Retrieve stored URLs list
 const getUrls = async (req, res) => {
     try {
@@ -83,5 +105,7 @@ const processUrl = async (req, res) => {
 module.exports = {
     getUrls,
     getDataByUrl,
-    processUrl
+    processUrl,
+    searchUrlInDB,
+    createNewUrlInDB
 };
