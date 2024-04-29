@@ -1,5 +1,14 @@
 const app = require('../server');
 const request = require('supertest');
+const Url = require('../models/url_model');
+
+beforeAll(async () => {
+    await Url.deleteMany({});
+});
+
+afterAll(async () => {
+    await Url.deleteMany({});
+});
 
 describe('Testing accept incoming URL',()=>{
     const url = 'https://www.google.co.il';
@@ -10,6 +19,15 @@ describe('Testing accept incoming URL',()=>{
         });
         expect(response.statusCode).toEqual(200);
     });
+
+    test('Check if database is not empty after 6 seconds', async () => {
+        // Wait for 6 seconds (6000 milliseconds)
+        await new Promise(resolve => setTimeout(resolve, 6000));
+
+        // Check if database is not empty
+        const urls = await Url.find({});
+        expect(urls.length).toBeGreaterThan(0);
+    }, 100000);
 });
 
 describe('Testing accept incoming URL with missing url',()=>{
